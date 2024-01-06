@@ -1,0 +1,33 @@
+event onLoad() {
+    print("Codigo Cargado Correctamente" + title);
+    print("Version: " + title + "1.0");
+    print("Desarrollado por: " + "Pablo Plaza y ALO10");
+}
+
+config = {
+    "WebhookURL": "https://discord.com/api/webhooks/1054028648501493800/WEOqRTbIxzESnUauY6xX4Dze6unM2xMNWX7XiTfJjb6SsJYClC23E7fP7vl0-ATl-drt",
+    "GruaICON" : "https://i.imgur.com/oz8hjHT.png"
+};
+
+
+event onVehicleDamaged(vehicle, player, cause, damage, cancel)  
+{
+percentageHealth = vehicle.health / vehicle.maxHealth * 100;
+    if(percentageHealth <= 10)
+    {
+      vehicle.popTires();
+      vehicle.repair(100);
+      vehiclePos = vehicle.position;
+	Embed = discordEmbed();
+        Embed.title = "Vehiculo Necesita Remolque y Reparaciones";
+        Embed.description = player.nearestLocation + " | " + player.position.toString(); 
+        Embed.color = 16711680;
+        Embed.footer.text = "DEVILRP SERVER | Script hecho para DevilRP [Pablo Plaza]".format(time.now.date);
+        discord.sendEmbed(config["WebhookURL"], Embed);
+	if (player.hasGroup("mecanico"))
+	{
+        player.message("El sistema de llamada de un vehiculo ha lanzado una peticion a tu PDA, ve a la posicion marcada en tu mapa y ayuda al cliente ", "red", config["GruaICON"]);
+        player.marker.set(vector3(vehiclePos.x, vehiclePos.y, vehiclePos.z));
+	}
+    }
+}
